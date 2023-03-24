@@ -18,6 +18,15 @@ service cloud.firestore {
       allow write: if request.auth.uid == request.resource.data.uid;
       allow delete: if request.auth.uid == resource.data.uid;
     }
+
+    //Allow any authenticated user to view other users profiles, edit or create a profile
+    //Allow ONLY Admins to edit ANY users Profile
+
+    match /users/{userId} {
+      allow read: if request.auth.token.email_verified;
+      allow write: if request.auth.uid == request.resource.data.uid;
+      allow update: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
    
   }
 }
