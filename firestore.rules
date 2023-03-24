@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // Start by closing all access by default, then add what you need
     match /{document=**} {
-      allow read, write: if false;
+      allow read, write: if false; 
     }
 
     match /test/{docId} {
