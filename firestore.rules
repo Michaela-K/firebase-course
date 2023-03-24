@@ -1,11 +1,6 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Start by closing all access by default, then add what you need
-    match /{document=**} {
-      allow read, write: if false; 
-    }
-
     match /test/{docId} {
       allow read: if true;
       allow write: if false;
@@ -16,7 +11,13 @@ service cloud.firestore {
       resource.data.authorId == request.auth.uid);
     }
 
-    // Add new rules here
+    //Allow authenticated user to view, create, update and delete their own todos
+
+    match /todos/{todoId} {
+      allow read: if request.auth.token.email_verified;
+      allow write: if request.auth.uid == request.resource.data.uid;
+      allow delete: if request.auth.uid == resource.data.uid;
+    }
    
   }
 }
