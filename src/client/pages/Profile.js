@@ -75,11 +75,13 @@ const Profile = () => {
       </LoadingError>
 
       <Card>
-        <button type='button' className="ml-3 flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"  
-          onClick={() => {handleChange(); handleClick();}}>
-          {/* {`Change Status to ${!buttonStatus ? "Adminstrator" : "General User"}`} */}
+        <div className="flex justify-center">
+          <button type='button' className= {`ml-3 flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${adminMode? 'bg-indigo-500 hover:bg-indigo-700' : 'bg-gray-400'}`}  
+            onClick={() => {handleChange(); handleClick();}}>
+            {/* {`Change Status to ${!buttonStatus ? "Adminstrator" : "General User"}`} */}
           Switch User Status
-        </button>
+          </button>
+        </div>
       </Card>
     </main>
   );

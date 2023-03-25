@@ -27,11 +27,11 @@ const MyList = () => {
           </h1>
         </Card>
 
+        <TodoForm />
+
         <Card>
           <TodoList uid={user.uid} />
         </Card>
-
-        <TodoForm />
       </main>
     </>
   );
