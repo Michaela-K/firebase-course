@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import toast from 'react-hot-toast';
 import { USERS, updateUser } from '../../firebase/index';
 import firebase from '../../firebase/clientApp';
+
 
 import { useUser } from '../components/user-context';
 import LoadingError from '../components/LoadingError';
@@ -23,18 +25,33 @@ const Profile = () => {
     }
   );
 
-  // Check if current user is an admin
+  // Check the admin status of the Logged In user
   const [adminMode, setAdminMode] = useState(false);
+  const [buttonStatus, setButtonStatus] = useState(false);
 
   useEffect(() => {
     if (user) {
       db.collection(USERS)
         .doc(user.uid)
         .get()
-        .then((currentUser) => setAdminMode(currentUser.data().isAdmin));
+        .then((currentUser) => {setAdminMode(currentUser.data().isAdmin); });
     }
   }, []);
 
+  const handleChange = () => {    
+    if(adminMode){
+      updateUser(userDoc.uid, {isAdmin: !userDoc.isAdmin});
+      toast.success(`${userDoc.displayName} is now ${!userDoc.isAdmin ? "an Adminstrator" : "a General User"} `);
+    }else{
+      toast.error(`Oops, you need to be an Administrator to perform that action 😢`);
+    }
+  }
+
+  const handleClick = () => {
+    setButtonStatus(!userDoc.isAdmin)
+  }
+
+  
   return (
     <main>
       <Card>
@@ -56,6 +73,14 @@ const Profile = () => {
           </>
         )}
       </LoadingError>
+
+      <Card>
+        <button type='button' className="ml-3 flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"  
+          onClick={() => {handleChange(); handleClick();}}>
+          {/* {`Change Status to ${!buttonStatus ? "Adminstrator" : "General User"}`} */}
+          Switch User Status
+        </button>
+      </Card>
     </main>
   );
 };
