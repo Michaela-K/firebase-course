@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 
 import { Popover, Disclosure, Menu, Transition } from '@headlessui/react';
 import { NavLink } from 'react-router-dom';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import firebase from '../../firebase/clientApp';
 import { useUser } from './user-context';
+import { USERS } from '../../firebase/index';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -23,6 +24,38 @@ const Layout = ({ children }) => {
     { name: 'My List', href: '/my-list', exact: false },
     { name: 'Users', href: '/users', exact: false },
   ];
+
+  //Create a NEW USER & PROFILE after adding a new account in the singInWithPopUp window
+  const createNewUserInFirebase = (newUser) => {
+    const { uid, displayName } = newUser;
+  
+    const userRef = firebase.firestore().collection(USERS).doc(uid);
+    
+    userRef.get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log("User already exists");
+      } else {
+        const newUser = {
+          displayName,
+          isAdmin: false,
+          uid,
+          about: ''
+        };
+        userRef.set(newUser);
+      }
+    });
+  };
+    
+    const handleClick = () =>{
+      auth.signInWithPopup(googleAuthProvider)
+      .then((data) =>{
+        createNewUserInFirebase(data.user)
+    })
+    .catch((err) =>{
+      console.log(err)
+    })
+  }
 
   return (
     <div className="bg-gray-900 min-h-screen">
@@ -110,7 +143,7 @@ const Layout = ({ children }) => {
                     ) : (
                       <button
                         type="button"
-                        onClick={() => auth.signInWithPopup(googleAuthProvider)}
+                        onClick={() => handleClick()}
                         className="inline-flex items-center px-2.5 py-1.5 rounded-md shadow text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400"
                       >
                         Sign In
