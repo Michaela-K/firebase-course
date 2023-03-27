@@ -27,7 +27,6 @@ const Profile = () => {
 
   // Check the admin status of the Logged In user
   const [adminMode, setAdminMode] = useState(false);
-  const [buttonStatus, setButtonStatus] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -43,14 +42,9 @@ const Profile = () => {
       updateUser(userDoc.uid, {isAdmin: !userDoc.isAdmin});
       toast.success(`${userDoc.displayName} is now ${!userDoc.isAdmin ? "an Adminstrator" : "a General User"} `);
     }else{
-      toast.error(`Oops, you need to be an Administrator to perform that action 😢`);
+      toast.error(`Oops, you need Administrator status to perform that action`);
     }
   }
-
-  const handleClick = () => {
-    setButtonStatus(!userDoc.isAdmin)
-  }
-
   
   return (
     <main>
@@ -77,8 +71,7 @@ const Profile = () => {
       <Card>
         <div className="flex justify-center">
           <button type='button' className= {`ml-3 flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${adminMode? 'bg-indigo-500 hover:bg-indigo-700' : 'bg-gray-400'}`}  
-            onClick={() => {handleChange(); handleClick();}}>
-            {/* {`Change Status to ${!buttonStatus ? "Adminstrator" : "General User"}`} */}
+            onClick={() => {handleChange()}}>
           Switch User Status
           </button>
         </div>
