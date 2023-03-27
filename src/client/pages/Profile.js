@@ -42,7 +42,7 @@ const Profile = () => {
       updateUser(userDoc.uid, {isAdmin: !userDoc.isAdmin});
       toast.success(`${userDoc.displayName} is now ${!userDoc.isAdmin ? "an Adminstrator" : "a General User"} `);
     }else{
-      toast.error(`Oops, you need Administrator status to perform that action`);
+      toast.error(`Sorry, you need Admin status to perform that action`);
     }
   }
   
