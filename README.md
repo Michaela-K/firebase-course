@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Setting up a React And Firebase Project
 
 ## Prerequisites
@@ -85,6 +86,11 @@ tskill typeyourPIDhere
 ## Contribute
 
 🚧 This tutorial is a work in progress 🚧 We ❤️ feedback and help from fellow devs! If you found a bug, create an [issue](https://github.com/codebusters-ca/firebase-course/issues/new?labels=bug) or send us a [pull request](https://github.com/codebusters-ca/firebase-course/compare).
+=======
+# Welcome to the Firebase Tutorial
+
+🚧 This tutorial is a work in progress 🚧 We would love to hear your feedback! Check out [open issues](https://github.com/codebusters-ca/react-firebase-starter/issues), create a [new one](https://github.com/codebusters-ca/react-firebase-starter/issues/new?labels=bug), or send us a [pull request](https://github.com/codebusters-ca/react-firebase-starter/compare).
+>>>>>>> 9eb661c7262fecc8b739d00ad928dae36df8be3f
 
 ## Licence
 

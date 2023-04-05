@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 
 import { Popover, Disclosure, Menu, Transition } from '@headlessui/react';
 import { NavLink } from 'react-router-dom';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import firebase from '../../firebase/clientApp';
 import { useUser } from './user-context';
+import { USERS } from '../../firebase/index';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -23,6 +24,38 @@ const Layout = ({ children }) => {
     { name: 'My List', href: '/my-list', exact: false },
     { name: 'Users', href: '/users', exact: false },
   ];
+
+  //Create a NEW USER & PROFILE after adding a new account in the singInWithPopUp window
+  const createNewUserInFirebase = (newUser) => {
+    const { uid, displayName } = newUser;
+  
+    const userRef = firebase.firestore().collection(USERS).doc(uid);
+    
+    userRef.get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log("User already exists");
+      } else {
+        const newUser = {
+          displayName,
+          isAdmin: false,
+          uid,
+          about: ''
+        };
+        userRef.set(newUser);
+      }
+    });
+  };
+    
+    const handleClick = () =>{
+      auth.signInWithPopup(googleAuthProvider)
+      .then((data) =>{
+        createNewUserInFirebase(data.user)
+    })
+    .catch((err) =>{
+      console.log(err)
+    })
+  }
 
   return (
     <div className="bg-gray-900 min-h-screen">
@@ -64,7 +97,10 @@ const Layout = ({ children }) => {
                   </div>
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                     {user ? (
-                      <Menu as="div" className="ml-3 relative">
+                      <Menu as="div" className="ml-3 flex justify-between">
+                        <p className="text-white hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">
+                          {user.displayName}
+                        </p>
                         <div>
                           <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">Open user menu</span>
@@ -86,11 +122,6 @@ const Layout = ({ children }) => {
                         >
                           <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                             <Menu.Item>
-                              <p className="w-full block px-4 py-2 text-base text-center text-gray-700">
-                                {user.displayName}
-                              </p>
-                            </Menu.Item>
-                            <Menu.Item>
                               {({ active }) => (
                                 <button
                                   type="button"
@@ -110,7 +141,7 @@ const Layout = ({ children }) => {
                     ) : (
                       <button
                         type="button"
-                        onClick={() => auth.signInWithPopup(googleAuthProvider)}
+                        onClick={() => handleClick()}
                         className="inline-flex items-center px-2.5 py-1.5 rounded-md shadow text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400"
                       >
                         Sign In

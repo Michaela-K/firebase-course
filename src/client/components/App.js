@@ -2,7 +2,7 @@
 import React from 'react';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 
-import 'tailwindcss/tailwind.css';
+import 'tailwindcss/dist/tailwind.css';
 import { Toaster } from 'react-hot-toast';
 import Layout from './Layout';
 import { UserProvider } from './user-context';
